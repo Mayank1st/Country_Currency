@@ -46,9 +46,11 @@ To get started with this project, follow these steps:
    
 
 2. Refer to backend folder's .env.example file to check the credentials example.
+3. Refer to frontend folder's utils>axiosInstance.jsx file and change the baseURL to "localhost 8000" (if deployement link shows error or using github to execute the program)
+4. run the backend folder "npm run dev" and frontend folder "npm run dev"
 
 
-3. Deployement:
+5. Deployement:
   - [Frontend](https://world-currency-app.netlify.app/)
   - [Backend](https://country-currency-sp3l.onrender.com)
 
