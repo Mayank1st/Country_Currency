@@ -1,6 +1,24 @@
 import { Box, Link, Heading, Flex, Text, Button } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const Home = () => {
+  const navigate = useNavigate();
+
+  const handleSearchClick = () => {
+    console.log("Button clicked");
+
+    const isLoggedIn = Cookies.get("is_auth");
+    console.log("isLoggedIn:", isLoggedIn);
+
+    // Explicitly check for a truthy value
+    if (isLoggedIn === "true") {
+      navigate("/dashboard");
+    } else {
+      alert("Please login");
+    }
+  };
+
   return (
     <Box
       className="mt-4"
@@ -54,7 +72,6 @@ const Home = () => {
               Find detailed information about countries.
             </Text>
             <Button
-              as={Link}
               bg="#fff"
               color="#000000"
               fontWeight="bold"
@@ -64,7 +81,7 @@ const Home = () => {
               border="2px solid #fff"
               rounded="md"
               _hover={{ bg: "gray.300", textDecoration: "none" }}
-              to="/search"
+              onClick={handleSearchClick}
             >
               Start Searching
             </Button>
