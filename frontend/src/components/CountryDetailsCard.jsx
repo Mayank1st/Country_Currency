@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   chakra,
   Box,
@@ -11,7 +12,6 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import { useState } from "react";
 import axiosInstance from "../utils/axiosInstance";
 
 const CountryDetailsCard = ({
@@ -20,8 +20,10 @@ const CountryDetailsCard = ({
   languages,
   currency,
   flagUrl,
+  isFavorited: initialIsFavorited,
+  onFavoriteChange,
 }) => {
-  const [isFavorited, setIsFavorited] = useState(false);
+  const [isFavorited, setIsFavorited] = useState(initialIsFavorited);
 
   const handleHeartClick = async () => {
     try {
@@ -31,7 +33,7 @@ const CountryDetailsCard = ({
         await axiosInstance.post("/user/favorites", { countryName });
       }
       setIsFavorited((prev) => !prev);
-      window.location.reload();
+      onFavoriteChange(countryName, !isFavorited); // Notify parent component
     } catch (error) {
       console.error("Error updating favorite status:", error);
     }

@@ -1,6 +1,4 @@
-"use client";
-
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Box,
   Flex,
@@ -30,8 +28,9 @@ const Dashboard = () => {
   const [error, setError] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [sortOrder, setSortOrder] = useState("asc");
+  const [userName, setUserName] = useState(""); 
   const itemsPerPage = 6;
-  const inputRef = useRef(null);
+  const inputRef = React.useRef(null);
 
   // Fetch search history when the component mounts
   useEffect(() => {
@@ -47,6 +46,28 @@ const Dashboard = () => {
     };
 
     fetchSearchHistory();
+  }, []);
+
+  // Fetch user's favorites and name when the component mounts
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axiosInstance.get("/user/me");
+        setUserName(response.data.user.name);   
+      } catch (err) {
+        console.error(err);
+      }
+
+      try {
+        const response = await axiosInstance.get("/user/getfavorites");
+        const userFavorites = response.data.data.favorites;
+        setFavorites(userFavorites);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchUserData();
   }, []);
 
   // Debounced search function
@@ -101,55 +122,28 @@ const Dashboard = () => {
     debouncedSearch(query);
   };
 
-  const handlePageChange = (direction) => {
-    if (direction === "next") {
-      setCurrentPage((prev) => prev + 1);
-    } else {
-      setCurrentPage((prev) => Math.max(prev - 1, 1));
-    }
-  };
-
   const handleSortChange = (e) => {
     setSortOrder(e.target.value);
   };
 
-  // Fetch user's favorites when the component mounts
-  useEffect(() => {
-    const fetchFavorites = async () => {
-      try {
-        const response = await axiosInstance.get("/user/getfavorites");
-        const userFavorites = response.data.data.favorites;
-        setFavorites(userFavorites);
-      } catch (err) {
-        console.error(err);
-        // setError("Error fetching favorites.");
+  const updateFavorites = (countryName, isFavorited) => {
+    setFavorites((prevFavorites) => {
+      if (isFavorited) {
+        return [...prevFavorites, countryName];
+      } else {
+        return prevFavorites.filter((fav) => fav !== countryName);
       }
-    };
-
-    fetchFavorites();
-  }, []);
-
-  const addToFavorites = async (country) => {
-    try {
-      const response = await axiosInstance.post("/user/addfavorite", {
-        country: country.name,
-      });
-
-      // If the favorite is successfully added, update the favorites state
-      if (response.data.success) {
-        setFavorites((prevFavorites) => [...prevFavorites, country.name]);
-      }
-    } catch (err) {
-      console.error("Error adding to favorites", err);
-      setError("Error adding to favorites.");
-    }
+    });
   };
 
-  useEffect(() => {
-    if (searchHistory.length === 0 && inputRef.current) {
-      inputRef.current.focus();
+  // Handle page change
+  const handlePageChange = (direction) => {
+    if (direction === "next") {
+      setCurrentPage((prevPage) => prevPage + 1);
+    } else if (direction === "prev") {
+      setCurrentPage((prevPage) => Math.max(prevPage - 1, 1)); // Ensure page does not go below 1
     }
-  }, [searchHistory.length]);
+  };
 
   // Calculate the index of the first and last country details to display
   const indexOfLastCountry = currentPage * itemsPerPage;
@@ -181,6 +175,14 @@ const Dashboard = () => {
         <Heading as="h1" size="lg">
           Dashboard
         </Heading>
+        <Text 
+          fontSize="lg" 
+          fontWeight="bold" 
+          color={useColorModeValue("gray.800", "gray.200")}
+          ml={4} // Add margin-left for better spacing
+        >
+          Welcome, {userName || "User"}!
+        </Text>
         <Flex>
           <Input
             ref={inputRef}
@@ -273,7 +275,8 @@ const Dashboard = () => {
                   languages={country.languages}
                   currency={country.currency}
                   flagUrl={country.flag}
-                  onAddToFavorites={() => addToFavorites(country)}
+                  isFavorited={favorites.includes(country.name)}
+                  onFavoriteChange={updateFavorites} // Pass callback to update favorites
                 />
               ))}
             </Grid>

@@ -34,9 +34,9 @@ export default function Navbar() {
     Cookies.remove("is_auth");
     Cookies.remove("accessToken");
     Cookies.remove("refreshToken");
-    setIsLoggedIn(false); // Clear state
+    setIsLoggedIn(false); 
     navigate("/login");
-    window.location.reload(); // Force a reload to reset all state
+    window.location.reload(); 
   };
 
   return (

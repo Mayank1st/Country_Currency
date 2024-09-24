@@ -45,7 +45,7 @@ export default function Login() {
 
         if (isAuth) {
           navigate("/dashboard");
-          window.location.reload(); // Reload to update the state (Navbar, etc.)
+          window.location.reload(); 
         } else {
           setMessage("Login failed. Please try again.");
         }

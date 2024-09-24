@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import {
   Center,
@@ -13,31 +13,31 @@ import {
   PinInputField,
   Input,
   Text,
-} from '@chakra-ui/react';
-import { useState } from 'react';
-import { useFormik } from 'formik';
-import axiosInstance from '../utils/axiosInstance.js';
-import { useNavigate } from 'react-router-dom';
+} from "@chakra-ui/react";
+import { useState } from "react";
+import { useFormik } from "formik";
+import axiosInstance from "../utils/axiosInstance.js";
+import { useNavigate } from "react-router-dom";
 
 export default function VerifyOTP() {
-  const [otp, setOtp] = useState('');
-  const [message, setMessage] = useState('');
-  const [email, setEmail] = useState('');
+  const [otp, setOtp] = useState("");
+  const [message, setMessage] = useState("");
+  const [email, setEmail] = useState("");
   const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
-      email: '',
-      otp: '',
+      email: "",
+      otp: "",
     },
     onSubmit: async (values) => {
       try {
-        const response = await axiosInstance.post('/user/verify-email', {
+        const response = await axiosInstance.post("/user/verify-email", {
           email: values.email,
           otp: otp,
         });
         setMessage(response.data.message);
-        navigate('/login');
+        navigate("/login");
       } catch (error) {
         setMessage(error.response.data.message);
       }
@@ -46,31 +46,31 @@ export default function VerifyOTP() {
 
   return (
     <Flex
-      minH={'90vh'}
-      align={'center'}
-      justify={'center'}
-      bg={useColorModeValue('gray.50', 'gray.800')}
+      minH={"90vh"}
+      align={"center"}
+      justify={"center"}
+      bg={useColorModeValue("gray.50", "gray.800")}
     >
       <Stack
         spacing={4}
-        w={'full'}
-        maxW={'md'}
-        bg={useColorModeValue('white', 'gray.700')}
-        rounded={'xl'}
-        boxShadow={'lg'}
+        w={"full"}
+        maxW={"md"}
+        bg={useColorModeValue("white", "gray.700")}
+        rounded={"xl"}
+        boxShadow={"lg"}
         p={6}
         my={10}
       >
         <Center>
-          <Heading lineHeight={1.1} fontSize={{ base: '2xl', md: '3xl' }}>
+          <Heading lineHeight={1.1} fontSize={{ base: "2xl", md: "3xl" }}>
             Verify your Email
           </Heading>
         </Center>
         <Center
-          fontSize={{ base: 'sm', sm: 'md' }}
-          color={useColorModeValue('gray.800', 'gray.400')}
+          fontSize={{ base: "sm", sm: "md" }}
+          color={useColorModeValue("gray.800", "gray.400")}
         >
-          Please enter your email and OTP
+          Please enter your email and OTP, check OTP in spam as well.
         </Center>
         <FormControl>
           <Input
@@ -84,9 +84,9 @@ export default function VerifyOTP() {
           />
         </FormControl>
         <Center
-          fontSize={{ base: 'sm', sm: 'md' }}
+          fontSize={{ base: "sm", sm: "md" }}
           fontWeight="bold"
-          color={useColorModeValue('gray.800', 'gray.400')}
+          color={useColorModeValue("gray.800", "gray.400")}
         >
           {email}
         </Center>
@@ -103,17 +103,17 @@ export default function VerifyOTP() {
           </Center>
         </FormControl>
         {message && (
-          <Text color={message.includes('success') ? 'green.500' : 'red.500'}>
+          <Text color={message.includes("success") ? "green.500" : "red.500"}>
             {message}
           </Text>
         )}
         <Stack spacing={6}>
           <Button
             onClick={formik.handleSubmit}
-            bg={'blue.400'}
-            color={'white'}
+            bg={"blue.400"}
+            color={"white"}
             _hover={{
-              bg: 'blue.500',
+              bg: "blue.500",
             }}
           >
             Verify
