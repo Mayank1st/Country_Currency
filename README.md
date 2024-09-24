@@ -49,6 +49,6 @@ To get started with this project, follow these steps:
 
 
 3. Deployement:
-  - [Frontend](https://expressjs.com/)
+  - [Frontend](https://world-currency-app.netlify.app/)
   - [Backend](https://country-currency-sp3l.onrender.com)
 
