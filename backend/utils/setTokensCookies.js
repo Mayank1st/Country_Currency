@@ -15,6 +15,7 @@ const setTokensCookies = (
     httpOnly: true,
     secure: true, // Set to true if using HTTPS
     maxAge: accessTokenMaxAge,
+    sameSite: "None",
     // sameSite: 'strict', // Adjust according to your requirements
   });
 
@@ -23,6 +24,7 @@ const setTokensCookies = (
     httpOnly: true,
     secure: true, // Set to true if using HTTPS
     maxAge: refreshTokenmaxAge,
+    sameSite: "None",
     // sameSite: 'strict', // Adjust according to your requirements
   });
   // Set Cookie for is_auth
